@@ -1,0 +1,95 @@
+/* ─── App shell ────────────────────────────────────────────────────────────── */
+.app-shell {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  overflow-x: hidden;
+}
+
+/* ─── Split-view container ─────────────────────────────────────────────────── */
+/*
+   Left column: fixed 440px input panel (sticky)
+   Right column: flex 1 preview zone
+   Double-bezel approach: panels have their own background + hairline border
+*/
+.app-main {
+  display: grid;
+  grid-template-columns: 440px 1fr;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ─── taller body stretches the grid ──────────────────────────────────────── */
+.taller-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Left panel — input ───────────────────────────────────────────────────── */
+.panel-input {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  /* Double-bezel inner highlight at the right edge */
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.9);
+  padding: var(--space-6) var(--space-6) var(--space-7);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  /* Sticky: viewport minus taller-header (~57px) */
+  height: calc(100dvh - 57px);
+  position: sticky;
+  top: 0;
+  /* GPU-safe scroll hint */
+  will-change: scroll-position;
+}
+
+/* ─── Right panel — preview ────────────────────────────────────────────────── */
+.panel-preview {
+  background: var(--bg-preview);
+  /* Subtle inner radial gradient to add visual depth without flat boredom */
+  background-image: radial-gradient(
+    ellipse 80% 60% at 60% 30%,
+    rgba(255, 253, 248, 0.9) 0%,
+    var(--bg-preview) 100%
+  );
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--space-7) var(--space-6);
+  min-height: calc(100dvh - 57px);
+  overflow-y: auto;
+}
+
+/* ─── Responsive — stack below 960px ──────────────────────────────────────── */
+@media (max-width: 960px) {
+  .app-main {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-input {
+    height: auto;
+    position: static;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    box-shadow: none;
+  }
+
+  .panel-preview {
+    min-height: 480px;
+    padding: var(--space-6) var(--space-5);
+  }
+}
+
+@media (max-width: 600px) {
+  .panel-input {
+    padding: var(--space-5) var(--space-4) var(--space-6);
+  }
+
+  .panel-preview {
+    padding: var(--space-5) var(--space-3);
+  }
+}

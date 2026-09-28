@@ -1,0 +1,933 @@
+/* ─── Landing — Aplicar-inspired editorial design ──────────────────────────
+   Background: warm white with near-black type and ink navy actions
+   Font:        Geist Sans via Google Fonts (SaaS, Apple-adjacent, NOT Inter)
+   Sections:    AIDA — Nav / Hero / Features (Bento) / How / CTA
+   ─────────────────────────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ─── Landing tokens (scoped — don't conflict with app tokens) ──────────── */
+.landing-root {
+  --ld-bg:          #F7F6F1;
+  --ld-surface:     #FFFDF8;
+  --ld-surface-2:   #EEEDE6;
+  --ld-border:      rgba(17, 17, 15, 0.16);
+  --ld-border-soft: rgba(17, 17, 15, 0.07);
+
+  /* Text */
+  --ld-text:        #11110F;
+  --ld-text-muted:  #74736C;
+  --ld-text-subtle: #A5A39B;
+
+  /* Ink navy accent */
+  --ld-indigo:      #14213A;
+  --ld-indigo-glow: rgba(20, 33, 58, 0.16);
+  --ld-indigo-soft: rgba(20, 33, 58, 0.08);
+
+  /* Silver accent */
+  --ld-silver:      #A5A39B;
+
+  /* Radii */
+  --ld-r-sm: 8px;
+  --ld-r:    14px;
+  --ld-r-lg: 24px;
+
+  /* Timing */
+  --ld-ease: cubic-bezier(0.23, 1, 0.32, 1);
+  --ld-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Fonts */
+  --ld-font: 'Geist', 'SF Pro Display', system-ui, -apple-system, sans-serif;
+
+  font-family: var(--ld-font);
+  background: var(--ld-bg);
+  color: var(--ld-text);
+  overflow-x: hidden;
+}
+
+/* ─── Noise overlay — fixed, pointer-events-none ────────────────────────── */
+/* Adds grain that breaks the digital flatness (high-end-visual-design rule) */
+.landing-root::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+}
+
+/* ─── Floating navbar ───────────────────────────────────────────────────── */
+/* Apple-style: detached glass pill, not edge-to-edge (high-end rule) */
+.land-nav {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+  padding: 12px 20px 12px 24px;
+  border-radius: 999px;
+  background: rgba(255, 253, 248, 0.86);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--ld-border);
+  /* Top highlight edge — simulates light catching the material (apple-design rule) */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 4px 24px rgba(17, 17, 15, 0.12);
+  width: max-content;
+  max-width: calc(100vw - 48px);
+}
+
+.land-nav-logo {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--ld-text);
+  white-space: nowrap;
+}
+
+.land-nav-logo span {
+  color: var(--ld-indigo);
+}
+
+.land-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.land-nav-link {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ld-text-muted);
+  padding: 6px 14px;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: color 160ms var(--ld-ease), background 160ms var(--ld-ease);
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: var(--ld-font);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .land-nav-link:hover {
+    color: var(--ld-text);
+    background: var(--ld-indigo-soft);
+  }
+}
+
+.land-nav-cta {
+  font-size: 13px;
+  font-weight: 600;
+  color: #FFFDF8;
+  background: var(--ld-indigo);
+  padding: 8px 18px;
+  border-radius: 999px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--ld-font);
+  transition: background 160ms var(--ld-ease), transform 120ms var(--ld-ease-spring);
+  box-shadow: 0 0 0 1px rgba(255,253,248,0.22) inset;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .land-nav-cta:hover {
+    background: #0D172A;
+    transform: translateY(-1px);
+  }
+}
+
+.land-nav-cta:active {
+  transform: scale(0.97);
+}
+
+/* ─── Hero ──────────────────────────────────────────────────────────────── */
+.land-hero {
+  position: relative;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  padding: 140px 80px 100px;
+  overflow: hidden;
+}
+
+/* Ambient indigo radial glow — GPU-safe, fixed, not on scroll container */
+.land-hero-glow {
+  position: absolute;
+  top: -10%;
+  left: -5%;
+  width: 70vw;
+  height: 70vh;
+  background: radial-gradient(
+    ellipse at 30% 40%,
+    rgba(20, 33, 58, 0.08) 0%,
+    transparent 65%
+  );
+  pointer-events: none;
+  z-index: 0;
+  will-change: transform;
+}
+
+/* Silver glow right side */
+.land-hero-glow-silver {
+  position: absolute;
+  top: 20%;
+  right: -10%;
+  width: 50vw;
+  height: 60vh;
+  background: radial-gradient(
+    ellipse at 70% 50%,
+    rgba(17, 17, 15, 0.04) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.land-hero-inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 64px;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* ── Hero left — copy ── */
+.land-hero-copy {
+  max-width: 600px;
+}
+
+.land-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--ld-indigo);
+  background: var(--ld-indigo-soft);
+  border: 1px solid rgba(20, 33, 58, 0.22);
+  padding: 5px 12px;
+  border-radius: 999px;
+  margin-bottom: 32px;
+}
+
+.land-eyebrow-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ld-indigo);
+  animation: hero-dot-pulse 2s ease-in-out infinite;
+}
+
+@keyframes hero-dot-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.3; transform: scale(0.5); }
+}
+
+/* Hero headline — massive, tight, Apple-style */
+.land-h1 {
+  font-size: clamp(3.2rem, 6vw, 6rem);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.04em;   /* Apple rule: tighten large display text */
+  color: var(--ld-text);
+  margin: 0 0 24px;
+  max-width: 560px;
+  /* text-wrap: balance prevents orphaned words */
+  text-wrap: balance;
+}
+
+/* Gradient word highlight */
+.land-h1-accent {
+  color: var(--ld-indigo);
+}
+
+.land-hero-sub {
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--ld-text-muted);
+  margin: 0 0 48px;
+  max-width: 44ch;
+  font-weight: 400;
+}
+
+.land-hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* Primary CTA — filled indigo */
+.land-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #FFFDF8;
+  background: var(--ld-indigo);
+  padding: 14px 28px;
+  border-radius: var(--ld-r);
+  border: none;
+  cursor: pointer;
+  font-family: var(--ld-font);
+  text-decoration: none;
+  /* Double-bezel inner gloss */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 0 0 1px rgba(20, 33, 58, 0.52),
+    0 8px 24px rgba(20, 33, 58, 0.20);
+  transition:
+    background 160ms var(--ld-ease),
+    transform  120ms var(--ld-ease-spring),
+    box-shadow 160ms var(--ld-ease);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .land-btn-primary:hover {
+    background: #0D172A;
+    transform: translateY(-2px);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.15),
+      0 0 0 1px rgba(20, 33, 58, 0.62),
+      0 12px 32px rgba(20, 33, 58, 0.26);
+  }
+}
+
+.land-btn-primary:active {
+  transform: scale(0.97);
+}
+
+/* Icon circle inside button */
+.land-btn-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 253, 248, 0.20);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 120ms var(--ld-ease-spring);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .land-btn-primary:hover .land-btn-icon {
+    transform: translateX(2px) translateY(-1px);
+  }
+}
+
+/* Ghost CTA */
+.land-btn-ghost {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ld-text-muted);
+  background: none;
+  border: none;
+  padding: 14px 4px;
+  cursor: pointer;
+  font-family: var(--ld-font);
+  text-decoration: none;
+  transition: color 160ms var(--ld-ease);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .land-btn-ghost:hover {
+    color: var(--ld-text);
+  }
+}
+
+/* Trust strip */
+.land-hero-trust {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 48px;
+  font-size: 13px;
+  color: var(--ld-text-subtle);
+}
+
+.land-hero-trust-avatars {
+  display: flex;
+}
+
+.land-hero-trust-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--ld-bg);
+  background: var(--ld-surface-2);
+  margin-left: -8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ld-text-muted);
+}
+
+.land-hero-trust-avatar:first-child {
+  margin-left: 0;
+}
+
+/* ── Hero right — floating product mockup ── */
+.land-hero-visual {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* macOS window bezel — faux OS chrome (high-end-visual-design rule) */
+.land-mockup {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  background: var(--ld-surface);
+  border-radius: 16px;
+  border: 1px solid var(--ld-border);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.8) inset,
+    0 40px 100px rgba(17, 17, 15, 0.16),
+    0 0 0 1px rgba(17,17,15,0.08);
+  overflow: hidden;
+  /* Slight tilt for depth — removed on mobile */
+  transform: perspective(1200px) rotateY(-4deg) rotateX(2deg);
+  transition: transform 600ms var(--ld-ease);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .land-hero-visual:hover .land-mockup {
+    transform: perspective(1200px) rotateY(-1deg) rotateX(0.5deg);
+  }
+}
+
+/* Top bar with macOS traffic lights */
+.land-mockup-topbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 16px;
+  background: rgba(20, 33, 58, 0.04);
+  border-bottom: 1px solid var(--ld-border);
+}
+
+.land-mockup-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.land-mockup-dot.--red    { background: #FF5F57; }
+.land-mockup-dot.--yellow { background: #FEBC2E; }
+.land-mockup-dot.--green  { background: #28C840; }
+
+/* Mockup content area */
+.land-mockup-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Skeleton lines inside mockup — light, alive */
+.land-mockup-line {
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    rgba(20,33,58,0.05) 25%,
+    rgba(20,33,58,0.12) 50%,
+    rgba(20,33,58,0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: mockup-shimmer 2.2s ease-in-out infinite;
+}
+
+@keyframes mockup-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.land-mockup-line.--w-full  { width: 100%; }
+.land-mockup-line.--w-3-4   { width: 75%; }
+.land-mockup-line.--w-1-2   { width: 50%; }
+.land-mockup-line.--w-1-3   { width: 33%; }
+.land-mockup-line.--indigo  {
+  background: linear-gradient(
+    90deg,
+    rgba(20,33,58,0.18) 25%,
+    rgba(20,33,58,0.36) 50%,
+    rgba(20,33,58,0.18) 75%
+  );
+  background-size: 200% 100%;
+  animation: mockup-shimmer 2.2s ease-in-out infinite;
+  height: 8px;
+}
+
+.land-mockup-separator {
+  height: 1px;
+  background: var(--ld-border);
+  margin: 4px 0;
+}
+
+.land-mockup-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.land-mockup-chip {
+  height: 22px;
+  border-radius: 999px;
+  border: 1px solid rgba(20,33,58,0.28);
+  background: rgba(20,33,58,0.08);
+  animation: mockup-shimmer 2.2s ease-in-out infinite;
+}
+
+/* ─── Section wrapper (shared) ────────────────────────────────────────────── */
+.land-section {
+  position: relative;
+  z-index: 1;
+  padding: 140px 80px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.land-section-full {
+  position: relative;
+  z-index: 1;
+  padding: 140px 80px;
+}
+
+/* ─── Section headline common ────────────────────────────────────────────── */
+.land-section-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--ld-indigo);
+  margin-bottom: 20px;
+}
+
+.land-h2 {
+  font-size: clamp(2.2rem, 4vw, 3.8rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  color: var(--ld-text);
+  margin: 0 0 20px;
+  max-width: 640px;
+  text-wrap: balance;
+}
+
+.land-section-sub {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--ld-text-muted);
+  max-width: 52ch;
+  margin: 0 0 64px;
+}
+
+/* ─── Features — Bento grid (gpt-taste gapless rule) ────────────────────── */
+.land-bento {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-flow: dense;    /* gapless, no empty cells */
+  gap: 16px;
+}
+
+/* Card base — double-bezel architecture */
+.land-card {
+  background: var(--ld-surface);
+  border: 1px solid var(--ld-border);
+  border-radius: var(--ld-r);
+  padding: 36px;
+  position: relative;
+  overflow: hidden;
+  /* Inner top highlight */
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+  transition:
+    border-color 240ms var(--ld-ease),
+    box-shadow   240ms var(--ld-ease),
+    transform    240ms var(--ld-ease);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .land-card:hover {
+    border-color: rgba(20,33,58,0.28);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.9),
+      0 6px 24px rgba(17,17,15,0.12);
+    transform: translateY(-2px);
+  }
+}
+
+/* Ambient glow accent on hover — positioned behind content */
+.land-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(
+    ellipse 80% 60% at 30% 20%,
+    rgba(20,33,58,0.06) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  transition: opacity 400ms var(--ld-ease);
+  border-radius: inherit;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .land-card:hover::before {
+    opacity: 1;
+  }
+}
+
+/* Bento cell spans — gpt-taste math verified: 7+5=12, 5+7=12, all 12 cols ✓ */
+.land-card-wide    { grid-column: span 7; }
+.land-card-narrow  { grid-column: span 5; }
+.land-card-mid     { grid-column: span 5; }
+.land-card-fill    { grid-column: span 7; }
+.land-card-full    { grid-column: span 12; }
+
+.land-card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--ld-indigo-soft);
+  border: 1px solid rgba(20,33,58,0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  color: var(--ld-indigo);
+}
+
+.land-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ld-text);
+  margin: 0 0 10px;
+}
+
+.land-card-body {
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--ld-text-muted);
+  margin: 0;
+}
+
+/* Large card visual area */
+.land-card-visual {
+  margin-top: 28px;
+  border-radius: 10px;
+  background: var(--ld-surface-2);
+  border: 1px solid var(--ld-border);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ─── Process / How section ─────────────────────────────────────────────── */
+/* Horizontal steps with connecting line */
+.land-process {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  position: relative;
+  margin-top: 64px;
+}
+
+/* Horizontal rule connecting the steps */
+.land-process::before {
+  content: '';
+  position: absolute;
+  top: 24px;
+  left: calc(100% / 6);
+  right: calc(100% / 6);
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--ld-border) 20%,
+    var(--ld-border) 80%,
+    transparent
+  );
+}
+
+.land-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 32px;
+}
+
+.land-step-num {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--ld-surface);
+  border: 1px solid var(--ld-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ld-indigo);
+  font-variant-numeric: tabular-nums;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 20px;
+  box-shadow: 0 0 0 4px var(--ld-bg);
+}
+
+.land-step-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ld-text);
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+}
+
+.land-step-body {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--ld-text-muted);
+  margin: 0;
+  max-width: 28ch;
+}
+
+/* ─── Scrubbing text reveal section ─────────────────────────────────────── */
+/* Each word starts at opacity 0.15 and scrubs to 1 via GSAP ScrollTrigger */
+.land-reveal-section {
+  background: var(--ld-bg);
+  padding: 160px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle grid lines behind the text */
+.land-reveal-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(17,17,15,0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(17,17,15,0.045) 1px, transparent 1px);
+  background-size: 64px 64px;
+  pointer-events: none;
+}
+
+.land-reveal-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.land-reveal-text {
+  font-size: clamp(2rem, 4vw, 3.6rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+  color: var(--ld-text-subtle);   /* starts dimmed, GSAP brightens each word */
+}
+
+/* Each word span gets targeted by GSAP scrub */
+.land-word {
+  display: inline-block;
+  opacity: 0.15;
+  transition: none; /* GSAP owns this */
+  will-change: opacity;
+}
+
+/* ─── Final CTA section ─────────────────────────────────────────────────── */
+.land-cta-section {
+  padding: 160px 80px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+/* Centered radial indigo burst */
+.land-cta-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 70% 70% at 50% 50%,
+    rgba(20, 33, 58, 0.10) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.land-cta-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.land-cta-h2 {
+  font-size: clamp(2.6rem, 5vw, 5rem);
+  font-weight: 800;
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+  color: var(--ld-text);
+  margin: 0 0 24px;
+  text-wrap: balance;
+}
+
+.land-cta-sub {
+  font-size: 17px;
+  color: var(--ld-text-muted);
+  margin: 0 0 48px;
+  line-height: 1.7;
+}
+
+.land-cta-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* ─── Footer ─────────────────────────────────────────────────────────────── */
+.land-footer {
+  border-top: 1px solid var(--ld-border);
+  padding: 40px 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.land-footer-logo {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ld-text);
+}
+
+.land-footer-logo span {
+  color: var(--ld-indigo);
+}
+
+.land-footer-note {
+  font-size: 13px;
+  color: var(--ld-text-subtle);
+}
+
+.land-footer-links {
+  display: flex;
+  gap: 24px;
+}
+
+.land-footer-link {
+  font-size: 13px;
+  color: var(--ld-text-subtle);
+  text-decoration: none;
+  transition: color 160ms var(--ld-ease);
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: var(--ld-font);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .land-footer-link:hover { color: var(--ld-text-muted); }
+}
+
+/* ─── GSAP initial states for reveal animations ───────────────────────────
+   All elements start hidden — GSAP animates them in on scroll.
+   We set will-change: transform only on elements that WILL animate,
+   then clear it after (GSAP clearProps handles this).
+   ─────────────────────────────────────────────────────────────────────── */
+.gsap-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  /* blur removed here — applied via GSAP filter property */
+  will-change: opacity, transform;
+}
+
+/* ─── Responsive ──────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .land-hero { padding: 120px 48px 80px; }
+  .land-hero-inner {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+  .land-mockup {
+    transform: none;
+    max-width: 480px;
+  }
+  .land-bento { grid-template-columns: 1fr 1fr; }
+  .land-card-wide,
+  .land-card-narrow,
+  .land-card-mid,
+  .land-card-fill { grid-column: span 1; }
+  .land-card-full  { grid-column: span 2; }
+  .land-section    { padding: 100px 48px; }
+  .land-section-full { padding: 100px 48px; }
+  .land-reveal-section { padding: 100px 48px; }
+  .land-cta-section { padding: 100px 48px; }
+}
+
+@media (max-width: 768px) {
+  .land-hero { padding: 100px 24px 64px; }
+  .land-h1   { font-size: clamp(2.4rem, 8vw, 3.5rem); }
+  .land-nav  { gap: 16px; padding: 10px 12px 10px 18px; }
+  .land-nav-links { display: none; }
+  .land-bento { grid-template-columns: 1fr; }
+  .land-card-wide,
+  .land-card-narrow,
+  .land-card-mid,
+  .land-card-fill,
+  .land-card-full { grid-column: span 1; }
+  .land-process { grid-template-columns: 1fr; gap: 40px; }
+  .land-process::before { display: none; }
+  .land-step { align-items: flex-start; text-align: left; }
+  .land-section    { padding: 80px 24px; }
+  .land-section-full { padding: 80px 24px; }
+  .land-reveal-section { padding: 80px 24px; }
+  .land-cta-section { padding: 80px 24px; }
+  .land-footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+  .land-footer-links { flex-wrap: wrap; gap: 16px; }
+}
+
+/* ─── Reduced motion — cross-fade only, no blur or transform ─────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .gsap-reveal { opacity: 1; transform: none; }
+  .land-word   { opacity: 1; }
+  .land-mockup,
+  .land-hero-visual:hover .land-mockup { transform: none; }
+  .land-eyebrow-dot { animation: none; }
+  .land-mockup-line,
+  .land-mockup-chip { animation: none; }
+}

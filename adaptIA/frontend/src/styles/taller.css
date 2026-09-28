@@ -1,0 +1,186 @@
+/* ─── Taller section wrapper ─────────────────────────────────────────────── */
+.taller {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* ─── Section header bar ─────────────────────────────────────────────────── */
+/*
+   Sticky header that stays at the top of the workspace.
+   White background + hairline bottom border. Height ≈ 57px.
+*/
+.taller-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  /* Subtle bottom shadow to separate from the split view */
+  box-shadow: 0 1px 0 var(--border), var(--shadow-xs);
+  padding: 0 var(--space-6);
+  height: 57px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+}
+
+/* ─── Left group: badge + title ──────────────────────────────────────────── */
+.taller-header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* ─── AI status badge (pill with pulsing dot) ───────────────────────────── */
+.taller-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--primary);
+  background: var(--primary-soft);
+  border: 1px solid var(--primary-ring);
+  padding: 4px 10px 4px 8px;
+  border-radius: var(--radius-pill);
+  transition: background var(--t-fast) var(--ease-out);
+}
+
+.taller-badge:hover {
+  background: rgba(20, 33, 58, 0.12);
+}
+
+/* Pulsing live indicator dot */
+.taller-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary);
+  flex-shrink: 0;
+  animation: badge-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes badge-pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.35;
+    transform: scale(0.65);
+  }
+}
+
+/* ─── Title ─────────────────────────────────────────────────────────────── */
+.taller-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+/* ─── Right group: optional actions / status ─────────────────────────────── */
+.taller-header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* ─── Back to landing button ─────────────────────────────────────────────── */
+.taller-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: 4px 12px;
+  cursor: pointer;
+  transition: color var(--t-fast) var(--ease-out),
+    border-color var(--t-fast) var(--ease-out),
+    background var(--t-fast) var(--ease-out);
+  white-space: nowrap;
+}
+
+.taller-back-btn:hover {
+  color: var(--text);
+  border-color: var(--text-muted);
+  background: var(--surface-raised, rgba(0, 0, 0, 0.04));
+}
+
+/* ─── Botón de Descarga PDF ──────────────────────────────────────────────── */
+.taller-btn-descargar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--primary, #14213a);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill, 9999px);
+  padding: 5px 14px;
+  cursor: pointer;
+  transition: opacity var(--t-fast, 0.2s) ease,
+    transform var(--t-fast, 0.2s) ease;
+  white-space: nowrap;
+}
+
+.taller-btn-descargar:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* ─── Reglas de Impresión / Guardar PDF (Estándar ATS) ───────────────────── */
+@media print {
+
+  /* Oculta la barra superior, botones y cualquier elemento no imprimible */
+  .taller-header,
+  .no-print,
+  button,
+  input,
+  textarea {
+    display: none !important;
+  }
+
+  /* Oculta el panel izquierdo del formulario */
+  .taller>*:not(:has(.cv-sheet)):not(.cv-sheet) {
+    display: none !important;
+  }
+
+  /* Fondo blanco sin márgenes externos artificiales */
+  body,
+  html,
+  .taller {
+    background: #ffffff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* Formato para la hoja de resultados */
+  .cv-sheet {
+    box-shadow: none !important;
+    border: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 1.5cm;
+  }
+}

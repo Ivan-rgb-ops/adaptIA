@@ -1,0 +1,100 @@
+.hero-scanner-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  position: relative;
+  height: 240px; /* fixed height to constrain the animation */
+  padding: 20px;
+  background: var(--ld-surface, #FFFDF8);
+}
+
+/* Skeleton Columns */
+.scanner-col {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: rgba(20, 33, 58, 0.035);
+  border: 1px solid rgba(20, 33, 58, 0.10);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.scanner-col-title {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ld-text-muted, #74736C);
+  margin-bottom: 8px;
+}
+
+/* Skeleton Lines */
+.skel-line {
+  height: 8px;
+  background: rgba(20, 33, 58, 0.16);
+  border-radius: 999px;
+  width: 100%;
+}
+.skel-line.w-80 { width: 80%; }
+.skel-line.w-60 { width: 60%; }
+.skel-line.w-40 { width: 40%; }
+.skel-line.w-90 { width: 90%; }
+.skel-line.indent { margin-left: 10%; width: 70%; }
+
+/* Scanner Line */
+.scanner-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--ld-indigo, #14213A);
+  box-shadow: 0 0 12px 2px rgba(20, 33, 58, 0.32);
+  opacity: 0; /* Animated by GSAP */
+  z-index: 10;
+}
+
+/* Pills Layer */
+.scanner-pills-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.scanner-pill {
+  position: absolute;
+  background: rgba(20, 33, 58, 0.10);
+  border: 1px solid rgba(20, 33, 58, 0.28);
+  color: var(--ld-indigo, #14213A);
+  font-size: 9px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.05em;
+  transform: translate(-50%, -50%);
+  opacity: 0; /* Animated by GSAP */
+  /* We use GSAP to animate top and left, and scale */
+}
+
+/* Empty Slots in Right Column */
+.scanner-slot {
+  height: 18px;
+  border: 1px dashed rgba(20, 33, 58, 0.16);
+  border-radius: 999px;
+  background: rgba(20, 33, 58, 0.025);
+  margin: 2px 0;
+}
+
+/* Optimization Flash on Right Column */
+.scanner-flash {
+  position: absolute;
+  inset: 0;
+  background: var(--ld-indigo, #14213A);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+  mix-blend-mode: screen;
+}

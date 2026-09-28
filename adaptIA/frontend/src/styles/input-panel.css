@@ -1,0 +1,422 @@
+/* ─── Panel header ─────────────────────────────────────────────────────────── */
+.input-panel-header {
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: var(--space-5);
+}
+
+.input-panel-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ─── Field groups ─────────────────────────────────────────────────────────── */
+.field-group {
+  margin-bottom: var(--space-5);
+}
+
+.field-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  margin-bottom: var(--space-2);
+  cursor: default;
+}
+
+.field-label-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+/* ─── Dropzone — double-bezel architecture ─────────────────────────────────── */
+/*
+   Outer shell: subtle bg + dashed border
+   Inner feel: on hover the border becomes solid indigo and bg lifts
+   No transform on the outer — only on the icon inside (kinetic tension)
+*/
+.dropzone {
+  position: relative;
+  border: 1.5px dashed var(--border-strong);
+  border-radius: var(--radius);
+  padding: var(--space-5) var(--space-4);
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  background: var(--surface-2);
+  margin-bottom: var(--space-3);
+  /* CSS transition — cheapest tool that works (animate skill rule) */
+  transition:
+    border-color  var(--t-fast) var(--ease-out),
+    background    var(--t-fast) var(--ease-out),
+    box-shadow    var(--t-fast) var(--ease-out);
+}
+
+/* Only real hover devices get the hover state (animate skill rule) */
+@media (hover: hover) and (pointer: fine) {
+  .dropzone:hover:not(:has(.uploaded-file-card)) {
+    border-color: var(--primary);
+    border-style: solid;
+    background: var(--primary-soft);
+    box-shadow: var(--shadow-focus-indigo);
+  }
+
+  .dropzone:hover:not(:has(.uploaded-file-card)) .dropzone-icon {
+    color: var(--primary);
+    transform: translateY(-3px);
+  }
+}
+
+.dropzone--active {
+  border-color: var(--primary);
+  border-style: solid;
+  background: var(--primary-soft);
+  box-shadow: var(--shadow-focus-indigo);
+  transform: scale(1.008);
+}
+
+.dropzone--active .dropzone-icon {
+  color: var(--primary);
+  transform: translateY(-3px);
+}
+
+/* Upload icon — spring motion on hover */
+.dropzone-icon {
+  width: 28px;
+  height: 28px;
+  color: var(--text-subtle);
+  margin-bottom: var(--space-1);
+  transition:
+    color     var(--t-fast) var(--ease-out),
+    transform var(--t-base) var(--ease-spring);
+}
+
+.dropzone-title {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-body);
+}
+
+.dropzone-hint {
+  display: block;
+  font-size: 11.5px;
+  color: var(--text-subtle);
+  margin-top: 2px;
+}
+
+/* ─── Uploaded File Card ───────────────────────────────────────────────────── */
+.uploaded-file-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: var(--surface-3); 
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
+  box-shadow: var(--shadow-sm);
+  cursor: default;
+}
+
+.uploaded-file-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  overflow: hidden;
+}
+
+.uploaded-file-info .field-label-icon {
+  color: var(--primary);
+  width: 18px;
+  height: 18px;
+}
+
+.uploaded-file-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.uploaded-file-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-body);
+}
+
+.uploaded-file-size {
+  font-size: 11px;
+  color: var(--text-subtle);
+  font-variant-numeric: tabular-nums;
+}
+
+.uploaded-file-remove {
+  background: transparent;
+  border: none;
+  color: var(--text-subtle);
+  padding: 4px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--t-fast) var(--ease-out), color var(--t-fast) var(--ease-out);
+}
+
+.uploaded-file-remove:hover {
+  background: var(--error-soft);
+  color: var(--error);
+}
+
+/* ─── Or divider ───────────────────────────────────────────────────────────── */
+.field-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-1) 0 var(--space-3);
+}
+
+.field-divider-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.field-divider-text {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-subtle);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ─── Textarea ─────────────────────────────────────────────────────────────── */
+/*
+   Purposeful focus ring: indigo outline 3px glow (CSS transition, not JS)
+   Hover: border darkens — indicates interactivity before focus
+   Active background shifts to surface-3 — visual depth cue
+*/
+.text-field {
+  width: 100%;
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  padding: var(--space-3) var(--space-4);
+  font-size: 13.5px;
+  font-family: var(--font-body);
+  line-height: 1.65;
+  resize: vertical;
+  min-height: 120px;
+  /* Named properties only — never transition: all (animate skill rule) */
+  transition:
+    border-color var(--t-fast) var(--ease-out),
+    background   var(--t-fast) var(--ease-out),
+    box-shadow   var(--t-fast) var(--ease-out);
+  outline: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .text-field:hover:not(:focus) {
+    border-color: var(--border-strong);
+  }
+}
+
+.text-field:focus {
+  border-color: var(--primary);
+  background: var(--surface-3);
+  box-shadow: var(--shadow-focus-indigo);
+}
+
+.text-field::placeholder {
+  color: var(--text-subtle);
+  font-size: 13px;
+}
+
+/* ─── Character counter ────────────────────────────────────────────────────── */
+.field-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--space-1);
+  height: 16px;
+}
+
+.field-char-count {
+  font-size: 11px;
+  color: var(--text-subtle);
+  font-variant-numeric: tabular-nums;
+  transition: color var(--t-fast) var(--ease-out);
+}
+
+.field-char-count.--warn {
+  color: #9A5D09;
+}
+
+/* ─── Error message ─────────────────────────────────────────────────────────── */
+/*
+   Slide-down entry animation — feedback purpose (animate skill rule)
+   Duration 240ms, ease-out — confirms interface heard the user
+*/
+.field-error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  background: var(--error-soft);
+  border: 1px solid rgba(220, 38, 38, 0.20);
+  border-radius: var(--radius-sm);
+  color: var(--error);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  animation: error-slide-in var(--t-base) var(--ease-out) both;
+}
+
+@keyframes error-slide-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── CTA Button — primary ─────────────────────────────────────────────────── */
+/*
+   Button-in-button architecture (high-end-visual-design skill):
+   - Main pill with indigo fill
+   - Inner icon circle with translucent overlay
+   - Hover: lift + indigo shadow (spring easing)
+   - Active: scale down to 0.98 — physical press simulation
+   - Ripple: radial wave from click position
+*/
+.btn-primary {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: var(--primary);
+  color: #FFFFFF;
+  border: none;
+  border-radius: var(--radius);
+  padding: 13px var(--space-5);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  cursor: pointer;
+  margin-top: auto;
+  /* Inset highlight — double-bezel technique */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    var(--shadow-sm);
+  transition:
+    transform   var(--t-instant) var(--ease-spring),
+    box-shadow  var(--t-fast)    var(--ease-out),
+    background  var(--t-fast)    var(--ease-out),
+    filter      var(--t-fast)    var(--ease-out);
+}
+
+/* Subtle top-left gloss overlay */
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    transparent 55%
+  );
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn-primary:hover:not(:disabled) {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.15),
+      0 8px 24px rgba(20, 33, 58, 0.22),
+      var(--shadow-md);
+    filter: brightness(1.04);
+  }
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0) scale(0.985);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    var(--shadow-xs);
+  filter: brightness(0.97);
+}
+
+.btn-primary:disabled {
+  opacity: 0.48;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  filter: none;
+}
+
+/* Inner icon circle — button-in-button */
+.btn-icon-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform var(--t-fast) var(--ease-spring);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn-primary:hover:not(:disabled) .btn-icon-circle {
+    transform: translateX(2px) translateY(-1px) scale(1.08);
+  }
+}
+
+/* ─── Click ripple ─────────────────────────────────────────────────────────── */
+.btn-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+  transform: scale(0);
+  animation: ripple-burst 650ms var(--ease-out) forwards;
+  pointer-events: none;
+}
+
+@keyframes ripple-burst {
+  to { transform: scale(4); opacity: 0; }
+}
+
+/* ─── Loading spinner ──────────────────────────────────────────────────────── */
+.btn-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.30);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.65s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
