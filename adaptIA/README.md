@@ -11,5 +11,5 @@ Plataforma web para adaptar y optimizar currículums utilizando Inteligencia Art
 
 1. **Clonar el repositorio:**
    ```bash
-   git clone [https://github.com/tu-usuario/adaptia.git](https://github.com/tu-usuario/adaptia.git)
+git clone https://github.com/Ivan-rgb-ops/adaptIA.git
    cd adaptia

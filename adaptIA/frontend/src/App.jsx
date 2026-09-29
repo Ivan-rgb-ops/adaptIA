@@ -4,7 +4,10 @@ import Landing from './components/Landing.jsx';
 import ToolSection from './components/ToolSection.jsx';
 import Footer from './components/Footer.jsx';
 
-const API_BASE = '/api';
+// Si existe la variable de entorno de Render, la usa; si no, usa '/api' para desarrollo local
+const API_BASE = import.meta.env.VITE_API_URL 
+  ? `${import.meta.env.VITE_API_URL}/api` 
+  : '/api';
 
 /* ── Taller page ────────────────────────────────────────────────────────── */
 function TallerPage() {

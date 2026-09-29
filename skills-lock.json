@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "website-to-video": {
+      "source": "calesthio/OpenMontage",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/website-to-video/SKILL.md",
+      "computedHash": "5d9906ccfbb7bc7a38689aa4eb1f251321adba5d41f29fb73ad56e4781c55c95"
+    }
+  }
+}

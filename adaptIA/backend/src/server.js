@@ -4,10 +4,15 @@ import cors from 'cors';
 import multer from 'multer';
 import rateLimit from 'express-rate-limit';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 import { extractCvText, CvParseError, ALLOWED_EXTENSIONS } from './cvParser.js';
 import { askGeminiJSON } from './geminiClient.js';
 import { TAILOR_SYSTEM_PROMPT, buildTailorUserPrompt } from './prompts.js';
+
+// --- Configuración de __dirname para ES Modules ---
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const MAX_CV_CHARS = 20_000;
@@ -118,6 +123,14 @@ app.post('/api/tailor', tailorLimiter, async (req, res) => {
     console.error('[tailor] error:', err.message);
     res.status(502).json({ error: 'No se pudo generar la adaptación. Intentá de nuevo en unos minutos.' });
   }
+});
+
+// --- Servir el Frontend compilado (React) ---
+app.use(express.static(path.join(__dirname, '../../frontend/dist')));
+
+// Cualquier ruta que no sea de la API devuelve el index.html para que funcione el enrutamiento de React
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../frontend/dist/index.html'));
 });
 
 // --- Manejo de errores centralizado (multer, body-parser, etc.) ---
