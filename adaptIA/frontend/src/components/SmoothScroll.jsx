@@ -1,26 +1,4 @@
-/**
- * SmoothScroll.jsx
- * ─────────────────────────────────────────────────────────────────────────────
- * Wrapper component reutilizable que aplica smooth scroll Lenis + GSAP
- * a toda la sub-árbol de React que envuelve.
- *
- * Uso:
- *   <SmoothScroll>
- *     <App />
- *   </SmoothScroll>
- *
- * También expone la instancia de Lenis vía Context para que cualquier
- * componente hijo pueda acceder y llamar lenis.scrollTo(), lenis.stop(), etc.
- *
- * Props:
- *   duration        {number}  1.4–1.8  (default 1.6) — inercia de desaceleración
- *   wheelMultiplier {number}  (default 0.85)
- *   touchMultiplier {number}  (default 1.5)
- *   smoothTouch     {boolean} (default false)
- * ─────────────────────────────────────────────────────────────────────────────
- */
-
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useSmoothScroll } from '../hooks/useSmoothScroll';
 
 // ── Context ──────────────────────────────────────────────────────────────────
@@ -42,6 +20,17 @@ export default function SmoothScroll({
   touchMultiplier = 1.5,
   smoothTouch     = false,
 }) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   const { lenisRef } = useSmoothScroll({
     duration,
     wheelMultiplier,
@@ -49,6 +38,11 @@ export default function SmoothScroll({
     smoothTouch,
     autoRaf: false,
   });
+
+  // Si es un celular, devolvemos los elementos directamente sin envolverlos en Lenis
+  if (isMobile) {
+    return <>{children}</>;
+  }
 
   return (
     <LenisContext.Provider value={lenisRef}>
